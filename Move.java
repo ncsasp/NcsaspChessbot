@@ -1,24 +1,12 @@
 public class Move {
-  private int a;
-  private int b;
-  private int c;
-  private int d;
   private Board board;
 
   public Move(int a, int b, int c, int d, Board board) {
-    this.a = a;
-    this.b = b;
-    this.c = c;
-    this.d = d;
     this.board = board;
     board.movePiece(a, b, c, d, true);
   }
 
   public Move(int a, int b, int c, int d, Piece[][] board, int wMoves, int bMoves){
-    this.a = a;
-    this.b = b;
-    this.c = c;
-    this.d = d;
     Piece[][] tempBoard = new Piece[8][8];
     for(int i = 0; i < 8; i++){
       for(int j = 0; j < 8; j++){

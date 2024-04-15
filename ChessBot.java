@@ -16,8 +16,8 @@ public class ChessBot{
     } catch (InterruptedException e) {
 
     }
+    ArrayList<String> tried = new ArrayList<String>();
     while(permaBoard.checkStatus() != 2){
-      ArrayList<String> tried = new ArrayList<String>();
       int a = randomNumberGenerator.nextInt(8);
       int b = randomNumberGenerator.nextInt(8);
       int c = randomNumberGenerator.nextInt(8);
@@ -33,7 +33,7 @@ public class ChessBot{
         tried.add(a+" "+b+" "+c+" "+d);
         if(permaBoard.checkValid(a,b,c,d,false)){
           permaBoard.movePiece(a,b,c,d,false);
-        
+          tried = new ArrayList<String>();
           permaBoard.printBoard();
           try {
             Thread.sleep(0);
@@ -43,12 +43,12 @@ public class ChessBot{
 
         }
       }else{
-        if(tried.size() >= 2016){
+        if(tried.size() >= 4096){
           permaBoard.setCheckmate(true);
         }
       }
     }
-    if(permaBoard.getInCheck()){
+    if(permaBoard.checkForCheck()){
       System.out.println("Checkmate!");
     }else{
       System.out.println("Stalemate!");

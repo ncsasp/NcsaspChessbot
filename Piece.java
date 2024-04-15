@@ -55,6 +55,13 @@ abstract class Piece{
    rank = newRank;
    file = newFile;
   }
+  public boolean getSquareColor(){ //returns true if the piece is on a white square, and false if it is on a black square
+    if(file % 2 == rank % 2){
+      return false;
+    }else{
+      return true;
+    }
+  }
   
   public void promotion(int newType){
     if(type == 1 && (rank == 0 || rank == 7) && newType < 6 && newType > 1){

@@ -1,6 +1,6 @@
 import java.util.Scanner;
 
-// import java.util.ArrayList;
+import java.util.ArrayList;
 public class Board {
   // Default Chessboard positions on a standard chess board
   private Piece[][] board = new Piece[][] {
@@ -58,6 +58,9 @@ public class Board {
     } else if (inCheck) {
       return 1;
     } else {
+      if(checkStalemate()){
+        return 3;
+      }
       return 0;
     }
   }
@@ -164,6 +167,43 @@ public class Board {
     }
     System.out.println("\n --- --- --- --- --- --- --- ---");
     boardAnalysis();
+  }
+  public boolean checkStalemate(){
+    ArrayList<Piece> pieces = new ArrayList<Piece>();
+    for(int i = 0; i<8;i++){
+      for(int j = 0; j<8; j++){
+        if(board[i][j] != null){
+          pieces.add(board[i][j]);
+        }
+      }
+    }
+    if(pieces.size() == 2){ //Checks if there are only two pieces left on the board, in which case there are only kings left.
+      return true;
+    }else{
+      for(int i = 0; i < pieces.size(); i++){
+        if(pieces.get(i).getType() == 6){
+          pieces.remove(i);
+          i--;
+        }
+      }
+      if(pieces.size() > 2){
+        return false;
+      }
+      for(int i = 0; i < pieces.size(); i++){
+        if(pieces.get(i).getType() == 1 || pieces.get(i).getType() == 4 || pieces.get(i).getType() == 5){
+          return false;
+        }else if(pieces.size() == 1){
+          return true;
+        }else if(pieces.get(i).getType() == 3){
+          return false;
+        }else{
+          if(pieces.get(i).getSquareColor() == pieces.get(i+1).getSquareColor()){
+            return true;
+          }
+        }
+      }
+    }
+    return false;
   }
 
   public void boardAnalysis() {
@@ -325,5 +365,18 @@ public class Board {
     }
     return true;
   }
-
+  public boolean checkForCheck(){
+    for(int i = 0; i < 8; i++){
+      for(int j = 0; j < 8; j++){
+        if(board[i][j] != null){
+          if(board[i][j].getType() == 6){
+            return ((King) board[i][j]).checkForCheck(board, 7-i, j);
+          }
+        }
+      }
+    }
+    return false;
+    
+  }
 }
+

@@ -28,7 +28,7 @@ public class Runner {
       if(input.indexOf("y") != -1 || input.indexOf("Y") != -1){
         
         ChessBot.randomGame();
-        // scanner.close();
+        scanner.close();
         scanning = false;
       }else{
         System.out.print("Are you Sure?");
