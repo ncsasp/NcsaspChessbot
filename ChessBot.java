@@ -17,7 +17,7 @@ public class ChessBot{
 
     }
     ArrayList<String> tried = new ArrayList<String>();
-    while(permaBoard.checkStatus() != 2){
+    while(permaBoard.checkStatus()){
       int a = randomNumberGenerator.nextInt(8);
       int b = randomNumberGenerator.nextInt(8);
       int c = randomNumberGenerator.nextInt(8);

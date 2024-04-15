@@ -27,7 +27,7 @@ public class Runner {
       String input = scanner.nextLine();
       if(input.indexOf("y") != -1 || input.indexOf("Y") != -1){
         
-        ChessBot.randomGame();
+        ChessBot.randomGame(467);
         scanner.close();
         scanning = false;
       }else{

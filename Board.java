@@ -49,19 +49,11 @@ public class Board {
     return wMoves - bMoves;
   }
 
-  public int checkStatus() {
-    // 0 = nothing
-    // 1 = check
-    // 2 = mate
-    if (inCheckmate) {
-      return 2;
-    } else if (inCheck) {
-      return 1;
-    } else {
-      if(checkStalemate()){
-        return 3;
-      }
-      return 0;
+  public boolean checkStatus() {
+    if(inCheckmate || checkStalemate()){
+      return false;
+    }else{
+      return true;
     }
   }
   public void setCheckmate(boolean value){
@@ -197,7 +189,7 @@ public class Board {
         }else if(pieces.get(i).getType() == 3){
           return false;
         }else{
-          if(pieces.get(i).getSquareColor() == pieces.get(i+1).getSquareColor()){
+          if((pieces.get(i).getSquareColor() == pieces.get(i+1).getSquareColor()) && pieces.get(i+1).getType() == 2){
             return true;
           }
         }
