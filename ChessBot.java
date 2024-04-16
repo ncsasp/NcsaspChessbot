@@ -1,40 +1,47 @@
 import java.util.Random;
-import java.util.ArrayList;
+// import java.util.ArrayList;
 public class ChessBot{
-  public static void randomGame(){
+  private boolean unicode;
+  private boolean autoPromote;
+  public static long randomGame(boolean unicode, boolean autoPromote){
     int randNum = (int)(Math.random() * 1000);
-    randomGame(randNum);
+    return randomGame(randNum, unicode, autoPromote);
 
   }
-  public static void randomGame(long randNum){
+  public static long randomGame(long randNum, boolean unicode, boolean autoPromote){
+    int drawCounter = 0;
     Board permaBoard = new Board();
     Random randomNumberGenerator = new Random(randNum);
     System.out.println("Your game's seed is: " + randNum + ".");
-    permaBoard.printBoard();
+    permaBoard.printBoard(unicode);
     try {
       Thread.sleep(0);
     } catch (InterruptedException e) {
 
     }
-    ArrayList<String> tried = new ArrayList<String>();
+    // ArrayList<String> tried = new ArrayList<String>();
+    boolean[][][][] tried = new boolean[8][8][8][8];
+    int count = 0;
     while(permaBoard.checkStatus()){
       int a = randomNumberGenerator.nextInt(8);
       int b = randomNumberGenerator.nextInt(8);
       int c = randomNumberGenerator.nextInt(8);
       int d = randomNumberGenerator.nextInt(8);
-      String test = a+" "+b+" "+c+" "+d;
+      drawCounter++;
       boolean inList = false;
-      for(int i = 0; i < tried.size(); i++){
-        if(tried.get(i).equals(test)){
-          inList = true;
-        }
+      if(tried[a][b][c][d]){
+        inList = true;
+      }else{
+        tried[a][b][c][d] = true;
+        count++;
       }
       if(!inList){
-        tried.add(a+" "+b+" "+c+" "+d);
-        if(permaBoard.checkValid(a,b,c,d,false)){
-          permaBoard.movePiece(a,b,c,d,false);
-          tried = new ArrayList<String>();
-          permaBoard.printBoard();
+        if(permaBoard.checkValid(a,b,c,d,false,autoPromote)){
+          permaBoard.movePiece(a,b,c,d,false,autoPromote);
+          tried = new boolean[8][8][8][8];
+          count = 0;
+          permaBoard.printBoard(unicode);
+          System.out.println(randNum);
           try {
             Thread.sleep(0);
           } catch (InterruptedException e) {
@@ -43,7 +50,7 @@ public class ChessBot{
 
         }
       }else{
-        if(tried.size() >= 4096){
+        if(count >= 4096){
           permaBoard.setCheckmate(true);
         }
       }
@@ -53,6 +60,8 @@ public class ChessBot{
     }else{
       System.out.println("Stalemate!");
     }
+    System.out.println("Total Attempted Random Moves: " + drawCounter + ".");
+    return randNum;
   }
   
   

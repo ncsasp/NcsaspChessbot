@@ -78,7 +78,7 @@ public class Board {
     return board;
   }
 
-  public void printBoard() {
+  public void printBoard(boolean unicode) {
     /*
      * How the hell do i print this?
      * --- --- --- --- --- --- --- ---
@@ -113,40 +113,64 @@ public class Board {
           }
 
           if (board[outer][inner].getType() == 1) {
-            if (board[outer][inner].getColor() == -1) {
-              System.out.print("\u265F");
-            } else {
-              System.out.print("\u2659");
+            if(unicode){
+              if (board[outer][inner].getColor() == -1) {
+                System.out.print("\u265F");
+              } else {
+                System.out.print("\u2659");
+              }
+            }else{
+              System.out.print("P");
             }
           } else if (board[outer][inner].getType() == 2) {
-            if (board[outer][inner].getColor() == -1) {
-              System.out.print("\u265D");
-            } else {
-              System.out.print("\u2657");
+            if(unicode){
+              if (board[outer][inner].getColor() == -1) {
+                System.out.print("\u265D");
+              } else {
+                System.out.print("\u2657");
+              }
+            }else{
+              System.out.print("B");
             }
           } else if (board[outer][inner].getType() == 3) {
-            if (board[outer][inner].getColor() == -1) {
-              System.out.print("\u265E");
-            } else {
-              System.out.print("\u2658");
+            if(unicode){
+              if (board[outer][inner].getColor() == -1) {
+                System.out.print("\u265E");
+              } else {
+                System.out.print("\u2658");
+              }
+            }else{
+              System.out.print("N");
             }
           } else if (board[outer][inner].getType() == 4) {
-            if (board[outer][inner].getColor() == -1) {
-              System.out.print("\u265C");
-            } else {
-              System.out.print("\u2656");
+            if(unicode){
+              if (board[outer][inner].getColor() == -1) {
+                System.out.print("\u265C");
+              } else {
+                System.out.print("\u2656");
+              }
+            }else{
+              System.out.print("R");
             }
           } else if (board[outer][inner].getType() == 5) {
-            if (board[outer][inner].getColor() == -1) {
-              System.out.print("\u265B");
-            } else {
-              System.out.print("\u2655");
+            if(unicode){
+              if (board[outer][inner].getColor() == -1) {
+                System.out.print("\u265B");
+              } else {
+                System.out.print("\u2655");
+              }
+            }else{
+              System.out.print("Q");
             }
           } else if (board[outer][inner].getType() == 6) {
-            if (board[outer][inner].getColor() == -1) {
-              System.out.print("\u265A");
-            } else {
-              System.out.print("\u2654");
+            if(unicode){
+              if (board[outer][inner].getColor() == -1) {
+                System.out.print("\u265A");
+              } else {
+                System.out.print("\u2654");
+              }
+            }else{
+              System.out.print("K");
             }
           } else {
             System.out.print("something went wrong");
@@ -169,31 +193,42 @@ public class Board {
         }
       }
     }
+    int bCount = 0;
+    int nCount = 0;
     if(pieces.size() == 2){ //Checks if there are only two pieces left on the board, in which case there are only kings left.
       return true;
+    }else if(pieces.size() > 4){ //If there are more than four pieces left, it cannot be stalemate
+      return false;
     }else{
-      for(int i = 0; i < pieces.size(); i++){
+      for(int i = 0; i < pieces.size(); i++){ //Removes the Kings from the array, as they are not needed.
         if(pieces.get(i).getType() == 6){
           pieces.remove(i);
           i--;
+        }else if(pieces.get(i).getType() == 1 || pieces.get(i).getType() == 4 || pieces.get(i).getType() == 5){ //If one of the pieces is a Pawn, Rook, or Queen, it cannot be stalemate.
+          return false;
+        }else if(pieces.get(i).getType() == 2){
+          bCount++;
+        }else if(pieces.get(i).getType() == 3){
+          nCount++;
+        }else{
+          System.out.println("what");
         }
       }
-      if(pieces.size() > 2){
+      if(pieces.size() == 1){ //If there is only one piece, and it has gotten to this point, it is either a knight or a bishop, in which case there is insufficient material.
+        return true;
+      }
+      if(bCount == nCount){ //If there are an equal number of bishops and knights, there is not insufficient material.
         return false;
       }
-      for(int i = 0; i < pieces.size(); i++){
-        if(pieces.get(i).getType() == 1 || pieces.get(i).getType() == 4 || pieces.get(i).getType() == 5){
-          return false;
-        }else if(pieces.size() == 1){
-          return true;
-        }else if(pieces.get(i).getType() == 3){
-          return false;
-        }else{
-          if((pieces.get(i).getSquareColor() == pieces.get(i+1).getSquareColor()) && pieces.get(i+1).getType() == 2){
-            return true;
-          }
-        }
+      if(nCount > 1){ //If there is more than one knight, there is not insufficient material.
+        return false;
       }
+      if(pieces.get(0).getColor() == pieces.get(1).getColor()){ //If both remaining bishops are *of* the same color, there is not stalemate
+        return false;
+      }else if(pieces.get(0).getSquareColor() == pieces.get(1).getSquareColor()){ //If both remaining bishops are *on* the same color, there is stalemate.
+        return true;
+      }
+      
     }
     return false;
   }
@@ -210,7 +245,7 @@ public class Board {
     System.out.println("White has taken " + wMoves + " moves, and Black has taken " + bMoves + " moves.");
   }
 
-  public void movePiece(int rank, int file, int newRank, int newFile, boolean checking) {
+  public void movePiece(int rank, int file, int newRank, int newFile, boolean checking, boolean autoPromote) {
     Piece temp = null;
     if (newRank > 7 || newFile > 7 || newRank < 0 || newFile < 0) {
       System.out.println("Piece cannot move outside the chessboard!");
@@ -221,7 +256,7 @@ public class Board {
         System.out.println("There is not a piece there!");
       } else {
         temp = board[7 - rank][file];
-        if (checkValid(rank, file, newRank, newFile, checking)) {
+        if (checkValid(rank, file, newRank, newFile, checking,autoPromote)) {
           board[7 - rank][file] = null;
           board[7 - newRank][newFile] = temp;
           board[7 - newRank][newFile].move(newRank, newFile);
@@ -237,8 +272,13 @@ public class Board {
               @SuppressWarnings("resource")
               Scanner scanner = new Scanner(System.in);
               while (promoting) {
-                System.out.println("What would you like to promote to?");
-                String input = scanner.nextLine();
+                String input;
+                if(autoPromote){
+                  input = "queen";
+                }else{
+                  System.out.println("What would you like to promote to?");
+                  input = scanner.nextLine();
+                }
                 int tempColor = board[7-newRank][newFile].getColor();
                 if (input.indexOf("night") != -1) {
                   board[7 - newRank][newFile] = new Knight(tempColor,newRank,newFile);
@@ -277,7 +317,7 @@ public class Board {
     }
   }
 
-  public boolean checkValid(int rank, int file, int newRank, int newFile, boolean checking) {
+  public boolean checkValid(int rank, int file, int newRank, int newFile, boolean checking, boolean autoPromote) {
     if (board[7 - rank][file] == null) {
       return false;
     }
@@ -335,14 +375,14 @@ public class Board {
       int kingRank = -1;
       int kingFile = -1;
 
-      Move tempMove = new Move(rank, file, newRank, newFile, board,wMoves,bMoves);
+      Move tempMove = new Move(rank, file, newRank, newFile, board,wMoves,bMoves,autoPromote);
       for (int i = 0; i < 8; i++) {
         for (int j = 0; j < 8; j++) {
           if (tempMove.getBoard()[7 - i][j] != null) {
             if (tempMove.getBoard()[7 - i][j].getType() == 6 && tempMove.getBoard()[7-i][j].getColor() == getTurn()) {
               kingRank = i;
               kingFile = j;
-              if(((King) tempMove.getBoard()[7 - kingRank][kingFile]).checkForCheck(board, kingRank, kingFile)){
+              if(((King) tempMove.getBoard()[7 - kingRank][kingFile]).checkForCheck(tempMove.getBoard(), kingRank, kingFile)){
                 return false;
               }
             }
@@ -362,7 +402,9 @@ public class Board {
       for(int j = 0; j < 8; j++){
         if(board[i][j] != null){
           if(board[i][j].getType() == 6){
-            return ((King) board[i][j]).checkForCheck(board, 7-i, j);
+            if(((King) board[i][j]).checkForCheck(board, 7-i, j)){
+              return true;
+            }
           }
         }
       }
