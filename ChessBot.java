@@ -1,7 +1,9 @@
 import java.util.Random;
 // import java.util.ArrayList;
 public class ChessBot{
+  @SuppressWarnings("unused")
   private boolean unicode;
+  @SuppressWarnings("unused")
   private boolean autoPromote;
   public static long randomGame(boolean unicode, boolean autoPromote){
     int randNum = (int)(Math.random() * 1000);

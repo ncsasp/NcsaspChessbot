@@ -20,7 +20,7 @@ public class Runner {
     (_________)
     */
     Scanner scanner = new Scanner(System.in);
-    System.out.println("This is the Trial Program for the Chessbot System.\nCurrently it is only able to run a Random Game.\n It will create the next board state every 10 seconds.");
+    System.out.println("This is the Trial Program for the Chessbot System.\nCurrently it is only able to run a Random Game.\nIt will create the next board state every 10 seconds.");
     System.out.println("THIS IS CURRENTLY IN A DEBUG STATE.");
     boolean scanning = true;
     System.out.println("Autopromote to Queen? (Y/N)");
@@ -38,11 +38,10 @@ public class Runner {
     System.out.println("Begin Random Game? (Y/N)");
     scanning = true;
     while(scanning){
-      long seed = 0;
       input = scanner.nextLine();
       if(input.indexOf("y") != -1 || input.indexOf("Y") != -1){
         for(int i = 0; i < 100; i++){ //Iterating through 100 seeds in order to bugtest
-          seed = ChessBot.randomGame(unicode,autoPromote);
+          ChessBot.randomGame(unicode,autoPromote);
           // System.out.println("Continue?");
           // input = scanner.nextLine();
           // if(input.indexOf("eed") != -1){
