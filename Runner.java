@@ -20,7 +20,7 @@ public class Runner {
     (_________)
     */
     Scanner scanner = new Scanner(System.in);
-    System.out.println("This is the Trial Program for the Chessbot System.\nCurrently it is only able to run a Random Game.\nIt will create the next board state every 10 seconds.");
+    System.out.println("This is the Trial Program for the Chessbot System.\nCurrently it is only able to run a Random Game.\nIt will run a game, then pause at the end for 5 seconds.");
     System.out.println("THIS IS CURRENTLY IN A DEBUG STATE.");
     boolean scanning = true;
     System.out.println("Autopromote to Queen? (Y/N)");
