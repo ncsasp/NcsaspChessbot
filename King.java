@@ -14,11 +14,7 @@ public class King extends Piece{
           return false;
         }
       }
-      if(checkForCheck(board, newRank, newFile) == true){
-        return false;
-      }else{
-        return true;
-      }
+      return true;
     }
     return false;
   }
@@ -61,14 +57,11 @@ public class King extends Piece{
             if(temp.getType() == 2 || temp.getType() == 5 || (temp.getType() == 6 && n == 1) || (temp.getType() == 1 && n == 1 && temp.getColor() == 1 && getColor() == -1)){
               if(board[7-rank+n][file+n].getColor() != getColor()){
                 return true;  
-              }
+              }else{downRight = true;}
               
             }else{
-              if(temp.getType() != 6){
-                downRight = true;
-              }
-            
-           }
+              downRight = true;
+            }
           }
         }
       }
@@ -80,11 +73,9 @@ public class King extends Piece{
               if(temp.getType() == 2 || temp.getType() == 5 || (temp.getType() == 6 && n == 1) || (temp.getType() == 1 && n == 1 && temp.getColor() == 1 && getColor() == -1)){
                if(board[7-rank+n][file-n].getColor() != getColor()){
                 return true;  
-                }
+                }else{downLeft = true;}
               }else{
-                if(temp.getType() != 6){
-                  downLeft = true;
-                }
+                downLeft = true;
               }
             }
           }
@@ -97,11 +88,9 @@ public class King extends Piece{
             if(temp.getType() == 2 || temp.getType() == 5 || (temp.getType() == 1 && n == 1 && temp.getColor() == -1 && getColor() == 1) || (temp.getType() == 6 && n == 1)){
               if(board[7-rank-n][file+n].getColor() != getColor()){
                 return true;  
-              }
+              }else{upRight = true;}
             }else{
-              if(temp.getType() != 6){
-                upRight = true;
-              }
+              upRight = true;
             }
           }
         }
@@ -114,11 +103,9 @@ public class King extends Piece{
             if(temp.getType() == 2 || temp.getType() == 5 || (temp.getType() == 1 && n == 1 && temp.getColor() == -1 && getColor() == 1) || (temp.getType() == 6 && n == 1)){
               if(board[7-rank-n][file-n].getColor() != getColor()){
                 return true;  
-              }
+              }else{upLeft = true;}
             }else{
-              if(temp.getType() != 6){
-                upLeft = true;
-              }
+              upLeft = true;
             }
           }
         }
@@ -131,11 +118,9 @@ public class King extends Piece{
             if(tempType == 4 || tempType == 5 || (tempType == 6 && n == 1)){
               if(board[7-rank][file+n].getColor() != getColor()){
                 return true;  
-              }
+              }else{right = true;}
             }else{
-              if(tempType != 6){
-                right = true;
-              }
+              right = true;
             }
           }
         }
@@ -148,11 +133,9 @@ public class King extends Piece{
             if(tempType == 4 || tempType == 5 || (tempType == 6 && n == 1)){
               if(board[7-rank][file-n].getColor() != getColor()){
                 return true;  
-              }
+              }else{left = true;}
             }else{
-              if(tempType != 6){
-                left = true;
-              }
+              left = true;
             }
           }
         }
@@ -165,11 +148,9 @@ public class King extends Piece{
             if(tempType == 4 || tempType == 5 || (tempType == 6 && n == 1)){
               if(board[7-rank+n][file].getColor() != getColor()){
                 return true;  
-              }
+              }else{up = true;}
             }else{
-              if(tempType != 6){
-                up = true;
-              }
+              up = true;
             }
           }
         }
@@ -182,11 +163,9 @@ public class King extends Piece{
             if(tempType == 4 || tempType == 5 || (tempType == 6 && n == 1)){
               if(board[7-rank-n][file].getColor() != getColor()){
                 return true;  
-              }
+              }else{down = true;}
             }else{
-              if(tempType != 6){
-                down = true;
-              }
+              down = true;
             }
           }
         }

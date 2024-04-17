@@ -1,16 +1,37 @@
 import java.util.Random;
-// import java.util.ArrayList;
+import java.util.ArrayList;
+import java.util.Scanner;
 public class ChessBot{
   @SuppressWarnings("unused")
   private boolean unicode;
   @SuppressWarnings("unused")
   private boolean autoPromote;
-  public static long randomGame(boolean unicode, boolean autoPromote){
-    int randNum = (int)(Math.random() * 1000);
-    return randomGame(randNum, unicode, autoPromote);
-
+  private static Scanner seedChecker = new Scanner("Seeds.txt");
+  private static ArrayList<Long> seeds = new ArrayList<Long>();
+  public static void debugPrep(){
+    while(seedChecker.hasNextLong()){
+      seeds.add(seedChecker.nextLong());
+    }
   }
-  public static long randomGame(long randNum, boolean unicode, boolean autoPromote){
+  public static Long randomGame(boolean unicode, boolean autoPromote){
+    boolean checking = true;
+    boolean found = false;
+    long randNum = 0;
+    while(checking){
+      randNum = (long)(Math.random() * 1000);
+      for(long i : seeds){
+        if(i == randNum){
+          found = true;
+        }
+      }
+      if(!found){
+        checking = false;
+        seeds.add((long)randNum);
+      }
+    }
+    return randomGame(randNum, unicode, autoPromote);
+  }
+  public static Long randomGame(long randNum, boolean unicode, boolean autoPromote){
     int drawCounter = 0;
     Board permaBoard = new Board();
     Random randomNumberGenerator = new Random(randNum);
