@@ -43,7 +43,7 @@ public class Runner {
       input = scanner.nextLine();
       if(input.indexOf("y") != -1 || input.indexOf("Y") != -1){
         for(int i = 0; i < 100; i++){ //Iterating through 100 seeds in order to bugtest
-          gameResults.add(ChessBot.randomGame(859,unicode,autoPromote));
+          gameResults.add(ChessBot.randomGame(unicode,autoPromote));
           System.out.println("Press ENTER to continue, type 'ESCAPE' to print all completed games.");
           input = scanner.nextLine();
           if(input.indexOf("ESC") != -1){
