@@ -1,34 +1,36 @@
 import java.util.Random;
-import java.util.ArrayList;
+//COMMENTED LINES ARE FOR DEBUG PURPOSES
+// import java.util.ArrayList;
 import java.util.Scanner;
 public class ChessBot{
+  private static Scanner input = new Scanner(System.in);
   @SuppressWarnings("unused")
   private boolean unicode;
   @SuppressWarnings("unused")
   private boolean autoPromote;
-  private static Scanner seedChecker = new Scanner("Seeds.txt");
-  private static ArrayList<Long> seeds = new ArrayList<Long>();
-  public static void debugPrep(){
-    while(seedChecker.hasNextLong()){
-      seeds.add(seedChecker.nextLong());
-    }
-  }
+  // private static Scanner seedChecker = new Scanner("Seeds.txt");
+  // private static ArrayList<Long> seeds = new ArrayList<Long>();
+  // public static void debugPrep(){
+  //   while(seedChecker.hasNextLong()){
+  //     seeds.add(seedChecker.nextLong());
+  //   }
+  // }
   public static Long randomGame(boolean unicode, boolean autoPromote){
-    boolean checking = true;
-    boolean found = false;
+    // boolean checking = true;
+    // boolean found = false;
     long randNum = 0;
-    while(checking){
+    // while(checking){
       randNum = (long)(Math.random() * 1000);
-      for(long i : seeds){
-        if(i == randNum){
-          found = true;
-        }
-      }
-      if(!found){
-        checking = false;
-        seeds.add((long)randNum);
-      }
-    }
+    //   for(long i : seeds){
+    //     if(i == randNum){
+    //       found = true;
+    //     }
+    //   }
+    //   if(!found){
+    //     checking = false;
+    //     seeds.add((long)randNum);
+    //   }
+    // }
     return randomGame(randNum, unicode, autoPromote);
   }
   public static Long randomGame(long randNum, boolean unicode, boolean autoPromote){
@@ -65,11 +67,12 @@ public class ChessBot{
           count = 0;
           permaBoard.printBoard(unicode);
           System.out.println(randNum);
-          try {
-            Thread.sleep(0);
-          } catch (InterruptedException e) {
+          // try {
+          //   Thread.sleep(0);
+          // } catch (InterruptedException e) {
     
-          }
+          // }
+          input.nextLine();
 
         }
       }else{
