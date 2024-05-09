@@ -3,7 +3,7 @@ public class Move {
 
   public Move(int a, int b, int c, int d, Board board,boolean autoPromote) {
     this.board = board;
-    board.movePiece(a, b, c, d, true,autoPromote);
+    board.movePiece(a, b, c, d, true);
   }
 
   public Move(int a, int b, int c, int d, Piece[][] board, int wMoves, int bMoves, boolean autoPromote){
@@ -24,7 +24,7 @@ public class Move {
       }
     }
     this.board = new Board(tempBoard,wMoves,bMoves);
-    this.board.movePiece(a,b,c,d,true,autoPromote);
+    this.board.movePiece(a,b,c,d,true);
   }
 
   public Piece[][] getBoard() {

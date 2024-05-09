@@ -1,13 +1,16 @@
 import java.util.Random;
 //COMMENTED LINES ARE FOR DEBUG PURPOSES
 // import java.util.ArrayList;
-import java.util.Scanner;
+// import java.util.Scanner;
 public class ChessBot{
-  private static Scanner input = new Scanner(System.in);
+  // private static Scanner input = new Scanner(System.in);
   @SuppressWarnings("unused")
-  private boolean unicode;
+  private static boolean unicode;
   @SuppressWarnings("unused")
-  private boolean autoPromote;
+  public static boolean autoPromote;
+  static int drawCounter = 0;
+  static Random randomNumberGenerator = new Random();
+  //DEBUG STUFF
   // private static Scanner seedChecker = new Scanner("Seeds.txt");
   // private static ArrayList<Long> seeds = new ArrayList<Long>();
   // public static void debugPrep(){
@@ -15,7 +18,7 @@ public class ChessBot{
   //     seeds.add(seedChecker.nextLong());
   //   }
   // }
-  public static Long randomGame(boolean unicode, boolean autoPromote){
+  public static Long randomGame(boolean unicode, boolean autoPromotey){
     // boolean checking = true;
     // boolean found = false;
     long randNum = 0;
@@ -31,12 +34,12 @@ public class ChessBot{
     //     seeds.add((long)randNum);
     //   }
     // }
-    return randomGame(randNum, unicode, autoPromote);
+    return randomGame(randNum, unicode, autoPromotey);
   }
-  public static Long randomGame(long randNum, boolean unicode, boolean autoPromote){
-    int drawCounter = 0;
+  public static Long randomGame(long randNum, boolean unicode, boolean autoPromotey){
+    autoPromote = autoPromotey;
     Board permaBoard = new Board();
-    Random randomNumberGenerator = new Random(randNum);
+    randomNumberGenerator.setSeed(randNum);
     System.out.println("Your game's seed is: " + randNum + ".");
     permaBoard.printBoard(unicode);
     try {
@@ -44,10 +47,33 @@ public class ChessBot{
     } catch (InterruptedException e) {
 
     }
-    // ArrayList<String> tried = new ArrayList<String>();
+    makeRandomMoves(permaBoard);
+    System.out.println(randNum);
+    // try {
+    //   Thread.sleep(0);
+    // } catch (InterruptedException e) {
+  
+    // }
+    // input.nextLine();
+    if(permaBoard.checkStalemate()){
+      System.out.println("Stalemate!");
+    }else if(permaBoard.checkForCheck()){
+      System.out.println("Checkmate!");
+      if(permaBoard.getTurn() == -1){
+        System.out.println("White Wins!");
+      }else if(permaBoard.getTurn() == 1){
+        System.out.println("Black Wins!");
+      }
+    }else{
+      System.out.println("Stalemate!");
+    }
+    System.out.println("Total Attempted Random Moves: " + drawCounter + ".");
+    return randNum;
+  }
+  private static void makeRandomMoves(Board board){
     boolean[][][][] tried = new boolean[8][8][8][8];
     int count = 0;
-    while(permaBoard.checkStatus()){
+    while(board.checkStatus()){
       int a = randomNumberGenerator.nextInt(8);
       int b = randomNumberGenerator.nextInt(8);
       int c = randomNumberGenerator.nextInt(8);
@@ -61,35 +87,24 @@ public class ChessBot{
         count++;
       }
       if(!inList){
-        if(permaBoard.checkValid(a,b,c,d,false,autoPromote)){
-          permaBoard.movePiece(a,b,c,d,false,autoPromote);
+        if(board.checkValid(a,b,c,d,false)){
+          System.out.println("--------------------------------\n");
+          int[] coordinates = {a,b,c,d};
+          System.out.println(MoveInterpreter.convertToString(coordinates,board));
+          board.movePiece(a,b,c,d,false);
           tried = new boolean[8][8][8][8];
           count = 0;
-          permaBoard.printBoard(unicode);
-          System.out.println(randNum);
-          // try {
-          //   Thread.sleep(0);
-          // } catch (InterruptedException e) {
-    
-          // }
-          input.nextLine();
+          board.printBoard(unicode);
+          
 
         }
       }else{
         if(count >= 4096){
-          permaBoard.setCheckmate(true);
+          board.setCheckmate(true);
+          return;
         }
       }
     }
-    if(permaBoard.checkForCheck()){
-      System.out.println("Checkmate!");
-    }else{
-      System.out.println("Stalemate!");
-    }
-    System.out.println("Total Attempted Random Moves: " + drawCounter + ".");
-    return randNum;
   }
-  
-  
-  
 }
+  

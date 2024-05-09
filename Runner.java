@@ -1,5 +1,5 @@
 import java.util.Scanner;
-import java.util.ArrayList;
+// import java.util.ArrayList;
 public class Runner {
   public static void main(String[] args) {
     /*
@@ -38,13 +38,13 @@ public class Runner {
     }
     System.out.println("Begin Random Game? (Y/N)");
     scanning = true;
-    ArrayList<Long> gameResults = new ArrayList<Long>();
+    // ArrayList<Long> gameResults = new ArrayList<Long>();
     while(scanning){
       input = scanner.nextLine();
       if(input.indexOf("y") != -1 || input.indexOf("Y") != -1){
         // COMMENTED LINES ARE FOR DEBUG PURPOSES
         // for(int i = 0; i < 100; i++){ //Iterating through 100 seeds in order to bugtest
-          gameResults.add(ChessBot.randomGame(unicode,autoPromote));
+          /*gameResults.add(*/ChessBot.randomGame(unicode,autoPromote)/*)*/;
         //   System.out.println("Press ENTER to continue, type 'ESCAPE' to print all completed games.");
         //   input = scanner.nextLine();
         //   if(input.indexOf("ESC") != -1){

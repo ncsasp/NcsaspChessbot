@@ -245,7 +245,7 @@ public class Board {
     System.out.println("White has taken " + wMoves + " moves, and Black has taken " + bMoves + " moves.");
   }
 
-  public void movePiece(int rank, int file, int newRank, int newFile, boolean checking, boolean autoPromote) {
+  public void movePiece(int rank, int file, int newRank, int newFile, boolean checking) {
     Piece temp = null;
     if (newRank > 7 || newFile > 7 || newRank < 0 || newFile < 0) {
       System.out.println("Piece cannot move outside the chessboard!");
@@ -256,7 +256,7 @@ public class Board {
         System.out.println("There is not a piece there!");
       } else {
         temp = board[7 - rank][file];
-        if (checkValid(rank, file, newRank, newFile, checking,autoPromote)) {
+        if (checkValid(rank, file, newRank, newFile, checking)) {
           board[7 - rank][file] = null;
           board[7 - newRank][newFile] = temp;
           board[7 - newRank][newFile].move(newRank, newFile);
@@ -273,7 +273,7 @@ public class Board {
               Scanner scanner = new Scanner(System.in);
               while (promoting) {
                 String input;
-                if(autoPromote){
+                if(ChessBot.autoPromote){
                   input = "queen";
                 }else{
                   System.out.println("What would you like to promote to?");
@@ -317,7 +317,7 @@ public class Board {
     }
   }
 
-  public boolean checkValid(int rank, int file, int newRank, int newFile, boolean checking, boolean autoPromote) {
+  public boolean checkValid(int rank, int file, int newRank, int newFile, boolean checking) {
     if (board[7 - rank][file] == null) {
       return false;
     }
@@ -375,7 +375,7 @@ public class Board {
       int kingRank = -1;
       int kingFile = -1;
 
-      Move tempMove = new Move(rank, file, newRank, newFile, board,wMoves,bMoves,autoPromote);
+      Move tempMove = new Move(rank, file, newRank, newFile, board,wMoves,bMoves,ChessBot.autoPromote);
       for (int i = 0; i < 8; i++) {
         for (int j = 0; j < 8; j++) {
           if (tempMove.getBoard()[7 - i][j] != null) {
