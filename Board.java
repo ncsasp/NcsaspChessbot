@@ -16,7 +16,6 @@ public class Board {
           new Pawn(1, 1, 5), new Pawn(1, 1, 6), new Pawn(1, 1, 7) },
       { new Rook(1, 0, 0), new Knight(1, 0, 1), new Bishop(1, 0, 2), new Queen(1, 0, 3), new King(1, 0, 4),
           new Bishop(1, 0, 5), new Knight(1, 0, 6), new Rook(1, 0, 7) } };
-
   private int bMoves = 0;
   private int wMoves = 0;
   private boolean inCheck = false;
@@ -102,8 +101,9 @@ public class Board {
      * Update: I did it!
      */
     for (int outer = 0; outer < 8; outer++) {
-      System.out.println("\n --- --- --- --- --- --- --- ---");
-      System.out.print("|");
+      System.out.println("\n   --- --- --- --- --- --- --- ---");
+
+      System.out.print((8-outer) + " |");
       for (int inner = 0; inner < 8; inner++) {
         if (board[outer][inner] != null) {
           if (board[outer][inner].getColor() == -1) {
@@ -181,7 +181,8 @@ public class Board {
         }
       }
     }
-    System.out.println("\n --- --- --- --- --- --- --- ---");
+    System.out.println("\n   --- --- --- --- --- --- --- ---");
+    System.out.println("    A   B   C   D   E   F   G   H");
     boardAnalysis();
   }
   public boolean checkStalemate(){
@@ -243,6 +244,9 @@ public class Board {
       System.out.println("Black and White have the same amount of Material.");
     }
     System.out.println("White has taken " + wMoves + " moves, and Black has taken " + bMoves + " moves.");
+  }
+  public void movePiece(int[] coordinates){
+    movePiece(coordinates[0],coordinates[1],coordinates[2],coordinates[3],false);
   }
 
   public void movePiece(int rank, int file, int newRank, int newFile, boolean checking) {
