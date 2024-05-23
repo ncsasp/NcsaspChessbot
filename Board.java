@@ -30,6 +30,8 @@ public class Board {
       return 0;
     }
   }
+  public ArrayList<String> WmoveHistory = new ArrayList<String>();
+  public ArrayList<String> BmoveHistory = new ArrayList<String>();
 
   public Board(Piece[][] board, int wMoves, int bMoves) {
     this.board = board;
@@ -100,9 +102,9 @@ public class Board {
      * 
      * Update: I did it!
      */
+    System.out.print("  CHESS BOARD                              WHITE   BLACK ");
     for (int outer = 0; outer < 8; outer++) {
-      System.out.println("\n   --- --- --- --- --- --- --- ---");
-
+      System.out.println("\n   --- --- --- --- --- --- --- ---       |-------|-------|");
       System.out.print((8-outer) + " |");
       for (int inner = 0; inner < 8; inner++) {
         if (board[outer][inner] != null) {
@@ -180,10 +182,53 @@ public class Board {
           System.out.print("   |");
         }
       }
+      //Printing the Move History Log
+      System.out.print(" ");
+      int Wtemp = (WmoveHistory.size()-1) - (outer);
+      int Btemp = (BmoveHistory.size()-1) - (outer);
+      int turn = wMoves-outer;
+      if(turn < 0){
+        turn = 0;
+      }
+      if(WmoveHistory.size() > outer && Wtemp >= 0){
+        String mhStringWht = WmoveHistory.get(Wtemp);
+        while(mhStringWht.length() < 7){
+          mhStringWht+=" ";
+        } 
+        System.out.print("    "+(turn)+"|" + mhStringWht + "|");
+      }else{
+        System.out.print("    "+(turn)+"|       |");
+      }
+      if(BmoveHistory.size() > outer && Btemp >= 0){
+        String mhStringBlk = BmoveHistory.get(Btemp);
+        while(mhStringBlk.length() < 7){
+          mhStringBlk+=" ";
+        }
+        System.out.print(mhStringBlk + "|");
+      }else{
+        System.out.print("       |");
+      }
     }
-    System.out.println("\n   --- --- --- --- --- --- --- ---");
-    System.out.println("    A   B   C   D   E   F   G   H");
+    System.out.println("\n   --- --- --- --- --- --- --- ---       |-------|-------|");
+    System.out.println("    a   b   c   d   e   f   g   h");
     boardAnalysis();
+  }
+  public void storeMoveToHistory(int[] move, int color){
+    if(color == 1){
+      WmoveHistory.add(MoveInterpreter.convertToString(move,this));
+      BmoveHistory.add("");
+    }else if(color == -1){
+      BmoveHistory.set(BmoveHistory.size()-1,MoveInterpreter.convertToString(move,this));
+    }
+  }
+  public int[] getMoveFromHistory(int index, int color){
+    if(color == 1){
+    return MoveInterpreter.interpret(WmoveHistory.get(index),this);
+    }else if(color == -1){
+    return MoveInterpreter.interpret(BmoveHistory.get(index),this);
+    }else{
+      return new int[]{-1,-1,-1,-1};
+    }
   }
   public boolean checkStalemate(){
     ArrayList<Piece> pieces = new ArrayList<Piece>();
@@ -261,6 +306,9 @@ public class Board {
       } else {
         temp = board[7 - rank][file];
         if (checkValid(rank, file, newRank, newFile, checking)) {
+          if(!checking){
+            storeMoveToHistory(new int[]{rank,file,newRank,newFile},getTurn());
+          }
           board[7 - rank][file] = null;
           board[7 - newRank][newFile] = temp;
           board[7 - newRank][newFile].move(newRank, newFile);
@@ -309,8 +357,6 @@ public class Board {
                 }
               }
             }
-          }else{
-            //TODO do the shit with the thing you know the one. do it. it's important.
           }
           
 

@@ -47,7 +47,16 @@ public class MoveInterpreter {
                 }else if(input.indexOf("x") != -1){
                     switch(input.substring(0,1)){
                         case "a","b","c","d","e","f","g","h": 
-                            fromA = input.substring(0,1);
+                            switch(input.substring(0,1)){
+                                case "a":fromA = "1";break;
+                                case "b":fromA = "2";break;
+                                case "c":fromA = "3";break;
+                                case "d":fromA = "4";break;
+                                case "e":fromA = "5";break;
+                                case "f":fromA = "6";break;
+                                case "g":fromA = "7";break;
+                                case "h":fromA = "8";break;
+                            }
                             
                             piece = "P";
                             break;
@@ -193,7 +202,7 @@ public class MoveInterpreter {
                                     if(tempBoard[7-(coordinates[2]-1)][coordinates[3]-1].getColor() == turn && tempBoard[7-(coordinates[2]-1)][coordinates[3]-1].getType() == 1){
                                         Piece tempPiece = tempBoard[7-(coordinates[2]-1)][coordinates[3]-1];
                                         if(fromA != "-1"){
-                                            if(!(tempPiece.getRank() != coordinates[0] && tempPiece.getFile() != coordinates[1])){
+                                            if((tempPiece.getFile() == coordinates[3] + 1 || tempPiece.getFile() == coordinates[3] - 1) && tempPiece.getRank() == coordinates[2] - 1){
                                                 coordinates[0] = tempPiece.getRank();
                                                 coordinates[1] = tempPiece.getFile();
                                             }else{
@@ -217,7 +226,7 @@ public class MoveInterpreter {
                                     if(tempBoard[7-(coordinates[2]-1)][coordinates[3]+1].getColor() == turn && tempBoard[7-(coordinates[2]-1)][coordinates[3]+1].getType() == 1){
                                         Piece tempPiece = tempBoard[7-(coordinates[2]-1)][coordinates[3]+1];
                                         if(fromA != "-1"){
-                                            if(!(tempPiece.getRank() != coordinates[0] && tempPiece.getFile() != coordinates[1])){
+                                            if((tempPiece.getFile() == coordinates[3] + 1 || tempPiece.getFile() == coordinates[3] - 1) && tempPiece.getRank() == coordinates[2] - 1){
                                                 coordinates[0] = tempPiece.getRank();
                                                 coordinates[1] = tempPiece.getFile();
                                             }else{
@@ -243,7 +252,7 @@ public class MoveInterpreter {
                                     if(tempBoard[7-(coordinates[2]+1)][coordinates[3]-1].getColor() == turn && tempBoard[7-(coordinates[2]+1)][coordinates[3]-1].getType() == 1){
                                         Piece tempPiece = tempBoard[7-(coordinates[2]+1)][coordinates[3]-1];
                                         if(fromA != "-1"){
-                                            if(!(tempPiece.getRank() != coordinates[0] && tempPiece.getFile() != coordinates[1])){
+                                            if((tempPiece.getFile() == coordinates[3] + 1 || tempPiece.getFile() == coordinates[3] - 1) && tempPiece.getRank() == coordinates[2] + 1){
                                                 coordinates[0] = tempPiece.getRank();
                                                 coordinates[1] = tempPiece.getFile();
                                             }else{
@@ -267,7 +276,7 @@ public class MoveInterpreter {
                                     if(tempBoard[7-(coordinates[2]+1)][coordinates[3]+1].getColor() == turn && tempBoard[7-(coordinates[2]+1)][coordinates[3]+1].getType() == 1){
                                         Piece tempPiece = tempBoard[7-(coordinates[2]+1)][coordinates[3]+1];
                                         if(fromA != "-1"){
-                                            if(!(tempPiece.getRank() != coordinates[0] && tempPiece.getFile() != coordinates[1])){
+                                            if((tempPiece.getFile() == coordinates[3] + 1 || tempPiece.getFile() == coordinates[3] - 1) && tempPiece.getRank() == coordinates[2] + 1){
                                                 coordinates[0] = tempPiece.getRank();
                                                 coordinates[1] = tempPiece.getFile();
                                             }else{

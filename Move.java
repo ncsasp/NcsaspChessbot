@@ -1,13 +1,12 @@
 public class Move {
   private Board board;
+  private int[] move;
 
-  public Move(int a, int b, int c, int d, Board board,boolean autoPromote) {
-    this.board = board;
-    board.movePiece(a, b, c, d, true);
-  }
+  
 
   public Move(int a, int b, int c, int d, Piece[][] board, int wMoves, int bMoves, boolean autoPromote){
     Piece[][] tempBoard = new Piece[8][8];
+    move = new int[]{a,b,c,d};
     for(int i = 0; i < 8; i++){
       for(int j = 0; j < 8; j++){
         if(board[i][j] != null){
@@ -25,6 +24,10 @@ public class Move {
     }
     this.board = new Board(tempBoard,wMoves,bMoves);
     this.board.movePiece(a,b,c,d,true);
+  }
+
+  public int[] getMove(){
+    return move;
   }
 
   public Piece[][] getBoard() {
