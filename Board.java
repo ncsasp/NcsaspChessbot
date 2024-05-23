@@ -102,7 +102,8 @@ public class Board {
      * 
      * Update: I did it!
      */
-    System.out.print("  CHESS BOARD                              WHITE   BLACK ");
+    System.out.println("\033[H\033[2J");
+    System.out.print("                                           WHITE   BLACK ");
     for (int outer = 0; outer < 8; outer++) {
       System.out.println("\n   --- --- --- --- --- --- --- ---       |-------|-------|");
       System.out.print((8-outer) + " |");
