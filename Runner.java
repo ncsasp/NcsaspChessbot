@@ -21,38 +21,58 @@ public class Runner {
     (_________)
     */
     Scanner scanner = new Scanner(System.in);
-    System.out.println("This is the Trial Program for the Chessbot System.\nCurrently it is set to run a PLAYER Game.\nPlease only use Algebraic Chess Notation.\nAn error will throw if ANYTHING ELSE is passed through the scanner.");
-    // System.out.println("THIS IS CURRENTLY IN A DEBUG STATE.");
+    System.out.println("This is the Nearly Complete ChessBot program, officially versioned as v1.1.0. \n You will now be asked to change settings for this instance.");
+    System.out.println("Display Unicode Characters? (y/n)");
     boolean scanning = true;
-    System.out.println("Use Unicode instead of Letters?");
+    String input;
     boolean unicode = false;
-    String input = scanner.nextLine();
-    if(input.indexOf("y") != -1 || input.indexOf("Y") != -1){
-      unicode = true;
-    }
-    System.out.println("Begin PLAYER Game? (Y/N)");
-    scanning = true;
-    // ArrayList<Long> gameResults = new ArrayList<Long>();
     while(scanning){
       input = scanner.nextLine();
-      if(input.indexOf("y") != -1 || input.indexOf("Y") != -1){
-        // COMMENTED LINES ARE FOR DEBUG PURPOSES
-        // for(int i = 0; i < 100; i++){ //Iterating through 100 seeds in order to bugtest
-          /*gameResults.add(*/ChessBot.playerGame(unicode)/*)*/;
-        //   System.out.println("Press ENTER to continue, type 'ESCAPE' to print all completed games.");
-        //   input = scanner.nextLine();
-        //   if(input.indexOf("ESC") != -1){
-        //     i = i + 100;
-        //   }
-        // } 
-        // for(Long i : gameResults){
-        //   System.out.println(i);
-        // }
-        scanner.close();
+      if(input.indexOf("Y") != -1 || input.indexOf("y") != -1){
+        unicode = true;
+        scanning = false;
+      }else if(input.indexOf("N") != -1 || input.indexOf("n") != -1){
         scanning = false;
       }else{
-        System.out.print("Are you Sure?");
+        System.out.println("Unrecognized input: Please say 'Y' or 'N' to respond to the prompt.");
       }
     }
+    System.out.println("Unicode set to: " + unicode + ".");
+    System.out.println("Please select Chess Mode:");
+    System.out.println("1) Random v Random");
+    System.out.println("2) Player v Random");
+    System.out.println("3) Player v Player");
+    System.out.println("4) Player v Smart");
+    System.out.println("5) Smart v Smart");
+    scanning = true;
+    int choice = 0;
+    while(scanning){
+      input = scanner.nextLine();
+      for(Integer i = 1; i <= 5; i++){
+        if(input.indexOf((i.toString())) != -1){
+          choice = i;
+        }
+      }
+      if(choice != 0){
+        scanning = false;
+      }
+    }
+    switch(choice){
+      case 1:ChessBot.randomGame(unicode,true);break;
+      case 2:ChessBot.playerRandomGame(unicode);break;
+      case 3:ChessBot.playerGame(unicode);break;
+      case 4:
+        System.out.println("How many moves ahead would you like the bot to look?\nRECOMMENDED VALUE: 2");
+        scanning = true;
+        ChessBot.playerSmartGame(unicode,scanner.nextInt());
+        break;
+      case 5:
+      System.out.println("How many moves ahead would you like the bot to look?\nRECOMMENDED VALUE: 2");
+      scanning = true;
+      ChessBot.Smartgame(unicode,scanner.nextInt());
+      break;
+      default: System.out.println("Somehow you bypassed my security measures.");break;
+    }
+    scanner.close();
   }
 }

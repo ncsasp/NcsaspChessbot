@@ -1,11 +1,52 @@
 
 
 public class King extends Piece{
-
-  public King(int color, int rank, int file) {
+  private boolean hasMoved = false;
+  private double[][] WvalueChart = new double[][]{
+    {-3.0,-4.0,-4.0,-5.0,-5.0,-4.0,-4,0,-3.0},
+    {-3.0,-4.0,-4.0,-5.0,-5.0,-4.0,-4,0,-3.0},
+    {-3.0,-4.0,-4.0,-5.0,-5.0,-4.0,-4,0,-3.0},
+    {-3.0,-4.0,-4.0,-5.0,-5.0,-4.0,-4,0,-3.0},
+    {-2.0,-3.0,-3.0,-4.0,-4.0,-3.0,-3.0,-2.0},
+    {-1.0,-2.0,-2.0,-2.0,-2.0,-2.0,-2.0,-1.0},
+    { 2.0, 2.0, 0.0, 0.0, 0.0, 0.0, 2.0, 2.0},
+    { 2.0, 3.0, 1.0, 0.0, 0.0, 1.0, 3.0, 2.0},
+  };
+  private double[][] BvalueChart = new double[][]{
+    { 2.0, 3.0, 1.0, 0.0, 0.0, 1.0, 3.0, 2.0},
+    { 2.0, 2.0, 0.0, 0.0, 0.0, 0.0, 2.0, 2.0},
+    {-1.0,-2.0,-2.0,-2.0,-2.0,-2.0,-2.0,-1.0},
+    {-2.0,-3.0,-3.0,-4.0,-4.0,-3.0,-3.0,-2.0},
+    {-3.0,-4.0,-4.0,-5.0,-5.0,-4.0,-4,0,-3.0},
+    {-3.0,-4.0,-4.0,-5.0,-5.0,-4.0,-4,0,-3.0},
+    {-3.0,-4.0,-4.0,-5.0,-5.0,-4.0,-4,0,-3.0},
+    {-3.0,-4.0,-4.0,-5.0,-5.0,-4.0,-4,0,-3.0},
+  };
+  public King(int color, int rank, int file,boolean hasMoved) {
       super(6, color, rank, file);
+      if(color == 1){
+        this.setValue(999 + WvalueChart[7-rank][file]);
+      }else if(color == -1){
+        this.setValue(-999 -BvalueChart[7-rank][file]);
+      }else{
+        System.out.println("No color.");
+      }
+      this.hasMoved = hasMoved;
   }
-
+  public void move(int newRank, int newFile){
+    super.move(newRank, newFile);
+    if(getColor() == 1){
+      this.setValue(999 + WvalueChart[7-newRank][newFile]);
+    }else if(getColor() == -1){
+      this.setValue(-999 -BvalueChart[7-newRank][newFile]);
+    }else{
+      System.out.println("No color.");
+    }
+    hasMoved = true;
+  }
+  public boolean getHasMoved(){
+    return hasMoved;
+  }
   public boolean valid(Piece[][] board, int newRank,int newFile){
       //The king can move one space in any direction. the easiest movement system i've done thus far.
     if((Math.abs(newRank-getRank()) == 1 || newRank-getRank() == 0) && (Math.abs(newFile-getFile()) == 1 || newFile-getFile() == 0)){

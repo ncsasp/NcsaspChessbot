@@ -2,9 +2,10 @@ import java.util.Scanner;
 
 import java.util.ArrayList;
 public class Board {
+  private ArrayList<int[]> takenPieces = new ArrayList<int[]>();
   // Default Chessboard positions on a standard chess board
   private Piece[][] board = new Piece[][] {
-      { new Rook(-1, 7, 0), new Knight(-1, 7, 1), new Bishop(-1, 7, 2), new Queen(-1, 7, 3), new King(-1, 7, 4),
+      { new Rook(-1, 7, 0), new Knight(-1, 7, 1), new Bishop(-1, 7, 2), new Queen(-1, 7, 3), new King(-1, 7, 4,false),
           new Bishop(-1, 7, 5), new Knight(-1, 7, 6), new Rook(-1, 7, 7) },
       { new Pawn(-1, 6, 0), new Pawn(-1, 6, 1), new Pawn(-1, 6, 2), new Pawn(-1, 6, 3), new Pawn(-1, 6, 4),
           new Pawn(-1, 6, 5), new Pawn(-1, 6, 6), new Pawn(-1, 6, 7) },
@@ -14,12 +15,18 @@ public class Board {
       { null, null, null, null, null, null, null, null },
       { new Pawn(1, 1, 0), new Pawn(1, 1, 1), new Pawn(1, 1, 2), new Pawn(1, 1, 3), new Pawn(1, 1, 4),
           new Pawn(1, 1, 5), new Pawn(1, 1, 6), new Pawn(1, 1, 7) },
-      { new Rook(1, 0, 0), new Knight(1, 0, 1), new Bishop(1, 0, 2), new Queen(1, 0, 3), new King(1, 0, 4),
+      { new Rook(1, 0, 0), new Knight(1, 0, 1), new Bishop(1, 0, 2), new Queen(1, 0, 3), new King(1, 0, 4,false),
           new Bishop(1, 0, 5), new Knight(1, 0, 6), new Rook(1, 0, 7) } };
   private int bMoves = 0;
   private int wMoves = 0;
   private boolean inCheck = false;
   private boolean inCheckmate = false;
+  public int getwMoves(){
+    return wMoves;
+  }
+  public int getbMoves(){
+    return bMoves;
+  }
   public int getTurn(){
     if(wMoves > bMoves){
       return -1;
@@ -44,18 +51,19 @@ public class Board {
 
   public Board(Piece[][] board) {
     this.board = board;
-  }
 
+  }
   public int getMoves() {
     return wMoves - bMoves;
   }
 
-  public boolean checkStatus() {
-    if(inCheckmate || checkStalemate()){
-      return false;
-    }else{
-      return true;
+  public int checkStatus() {
+    if(checkStalemate()){
+      return 1;
+    }else if(inCheckmate){
+      return 2;
     }
+    return 0;
   }
   public void setCheckmate(boolean value){
     inCheckmate = value;
@@ -72,6 +80,26 @@ public class Board {
         }
       }
     }
+    if(inCheck){
+      if(getTurn() == -1){
+        sum += 100;
+      }else if(getTurn() == 1){
+          sum -= 100;
+      }
+    }
+    if(checkStatus() == 2){
+      if(getTurn() == -1){
+        return 100000;
+      }else if(getTurn() == 1){
+        return -100000;
+      }
+    }else if(checkStatus() == 1){
+      if(getTurn() == -1){
+        return -100000;
+      }else if(getTurn() == 1){
+        return 100000;
+      }
+    }
     return sum;
   }
 
@@ -79,6 +107,77 @@ public class Board {
     return board;
   }
 
+  public String getTaken(boolean unicode){
+    String output = "TAKEN PIECES: ";
+    for(int[] simplifiedPiece : takenPieces){
+      if(simplifiedPiece[1] == -1){
+        output += "W";
+      }else if(simplifiedPiece[1] == 1){
+        output += "B";
+      }else{
+        return "Taken Pieces Error: No color";
+      }
+      if(!unicode){
+        switch(simplifiedPiece[0]){
+          case 1: output+= "P";break;
+          case 2: output+= "B";break;
+          case 3: output+= "N";break;
+          case 4: output+= "R";break;
+          case 5: output+= "Q";break;
+          case 6: output+= "K";break;
+          default:return "Taken Pieces Error: Incorrect Piece Typing (not a value from 1 - 6)";
+        }
+      }else{
+        switch(simplifiedPiece[0]){
+          case 1:
+            if(simplifiedPiece[1] == 1){
+              output+="\u265F";
+            } else {
+              output+="\u2659";
+            }
+            break;
+          case 2:
+          if(simplifiedPiece[1] == 1){
+            output+="\u265D";
+          } else {
+            output+="\u2657";
+          }
+          break;
+          case 3:
+          if(simplifiedPiece[1] == 1){
+            output+="\u265E";
+          } else {
+            output+="\u2658";
+          }
+          break;
+          case 4:
+          if(simplifiedPiece[1] == 1){
+            output+="\u265C";
+          } else {
+            output+="\u2656";
+          }
+          break;
+          case 5:
+          if(simplifiedPiece[1] == 1){
+            output+="\u265B";
+          } else {
+            output+="\u2655";
+          }
+          break;
+          case 6:
+          if(simplifiedPiece[1] == 1){
+            output+="\u265A";
+          } else {
+            output+="\u2654";
+          }
+          break;
+          default:return "Taken Pieces Error: Incorrect Piece Typing (not a value from 1 - 6)";
+        }
+      }
+      output+= ", ";
+    }
+    return output;
+  }
   public void printBoard(boolean unicode) {
     /*
      * How the hell do i print this?
@@ -103,9 +202,9 @@ public class Board {
      * Update: I did it!
      */
     System.out.println("\033[H\033[2J");
-    System.out.print("                                           WHITE   BLACK ");
+    System.out.print("                                             WHITE   BLACK ");
     for (int outer = 0; outer < 8; outer++) {
-      System.out.println("\n   --- --- --- --- --- --- --- ---       |-------|-------|");
+      System.out.println("\n   --- --- --- --- --- --- --- ---         |-------|-------|");
       System.out.print((8-outer) + " |");
       for (int inner = 0; inner < 8; inner++) {
         if (board[outer][inner] != null) {
@@ -196,9 +295,23 @@ public class Board {
         while(mhStringWht.length() < 7){
           mhStringWht+=" ";
         } 
-        System.out.print("    "+(turn)+"|" + mhStringWht + "|");
+        if(turn >= 100){
+          System.out.print("    "+(turn)+"|" + mhStringWht + "|");
+        }else if(turn >= 10){
+          System.out.print("     "+(turn)+"|" + mhStringWht + "|");
+        }else{
+          System.out.print("      "+(turn)+"|" + mhStringWht + "|");
+        }
+        
       }else{
-        System.out.print("    "+(turn)+"|       |");
+        if(turn >= 100){
+          System.out.print("    "+(turn)+"|       |");
+        }else if(turn >= 10){
+          System.out.print("     "+(turn)+"|       |");
+        }else{
+          System.out.print("      "+(turn)+"|       |");
+        }
+        
       }
       if(BmoveHistory.size() > outer && Btemp >= 0){
         String mhStringBlk = BmoveHistory.get(Btemp);
@@ -210,9 +323,17 @@ public class Board {
         System.out.print("       |");
       }
     }
-    System.out.println("\n   --- --- --- --- --- --- --- ---       |-------|-------|");
+    System.out.println("\n   --- --- --- --- --- --- --- ---         |-------|-------|");
     System.out.println("    a   b   c   d   e   f   g   h");
-    boardAnalysis();
+    boardAnalysis(unicode);
+  }
+  public void storeMoveToHistory(String move, int color){
+    if(color == 1){
+      WmoveHistory.add(move);
+      BmoveHistory.add("");
+    }else if(color == -1){
+      BmoveHistory.set(BmoveHistory.size()-1, move);
+    }
   }
   public void storeMoveToHistory(int[] move, int color){
     if(color == 1){
@@ -245,6 +366,37 @@ public class Board {
     if(pieces.size() == 2){ //Checks if there are only two pieces left on the board, in which case there are only kings left.
       return true;
     }else if(pieces.size() > 4){ //If there are more than four pieces left, it cannot be stalemate
+      //Stalemate by Repetition
+      int repetitionCounter = 0;
+      for(int i = 0; i < BmoveHistory.size(); i++){
+        String tempString = BmoveHistory.get(i);
+        for(int j = 0; j < BmoveHistory.size(); j++){
+          if(tempString.equals(BmoveHistory.get(j))){
+            repetitionCounter++;
+            j++;
+            if(repetitionCounter == 3){
+              return true;
+            }
+          }else{
+            repetitionCounter = 0;
+          }
+        }
+      }
+      repetitionCounter = 0;
+      for(int i = 0; i < WmoveHistory.size(); i++){
+        String tempString = WmoveHistory.get(i);
+        for(int j = 0; j < WmoveHistory.size(); j++){
+          if(tempString.equals(WmoveHistory.get(j))){
+            repetitionCounter++;
+            j++;
+            if(repetitionCounter == 3){
+              return true;
+            }
+          }else{
+            repetitionCounter = 0;
+          }
+        }
+      }
       return false;
     }else{
       for(int i = 0; i < pieces.size(); i++){ //Removes the Kings from the array, as they are not needed.
@@ -277,25 +429,63 @@ public class Board {
       }
       
     }
+    //Stalemate by Repetition
+    int repetitionCounter = 0;
+    for(int i = 0; i < BmoveHistory.size(); i++){
+      String tempString = BmoveHistory.get(i);
+      for(int j = 0; j < BmoveHistory.size(); j++){
+        if(tempString.equals(BmoveHistory.get(j))){
+          repetitionCounter++;
+          j++;
+          if(repetitionCounter == 3){
+            return true;
+          }
+        }else{
+          repetitionCounter = 0;
+        }
+      }
+    }
+    repetitionCounter = 0;
+    for(int i = 0; i < WmoveHistory.size(); i++){
+      String tempString = WmoveHistory.get(i);
+      for(int j = 0; j < WmoveHistory.size(); j++){
+        if(tempString.equals(WmoveHistory.get(j))){
+          repetitionCounter++;
+          j++;
+          if(repetitionCounter == 3){
+            return true;
+          }
+        }else{
+          repetitionCounter = 0;
+        }
+      }
+    }
+    
     return false;
   }
 
-  public void boardAnalysis() {
-    int eval = getEval();
+  public void boardAnalysis(boolean unicode) {
+    System.out.println(getTaken(unicode));
+    double eval = getEval();
     if (eval < 0) {
-      System.out.println("Black is currently winning by " + Math.abs(eval) + " points of material.");
+      System.out.println("Black has advantage by " + Math.abs(eval)/10 + " points.");
     } else if (eval > 0) {
-      System.out.println("White is currently winning by " + eval + " points of material.");
+      System.out.println("White has advantage by " + eval/10 + " points.");
     } else {
-      System.out.println("Black and White have the same amount of Material.");
+      System.out.println("Neither side has advantage.");
     }
-    System.out.println("White has taken " + wMoves + " moves, and Black has taken " + bMoves + " moves.");
+    // System.out.println("White has taken " + wMoves + " moves, and Black has taken " + bMoves + " moves.");
   }
-  public void movePiece(int[] coordinates){
-    movePiece(coordinates[0],coordinates[1],coordinates[2],coordinates[3],false);
+  public boolean movePiece(int[] coordinates,boolean castling){
+    for(int i : coordinates){
+      if(i == -1){
+        return false;
+      }
+    }
+    return movePiece(coordinates[0],coordinates[1],coordinates[2],coordinates[3],false,castling);
   }
 
-  public void movePiece(int rank, int file, int newRank, int newFile, boolean checking) {
+  public boolean movePiece(int rank, int file, int newRank, int newFile, boolean checking, boolean castling) {
     Piece temp = null;
     if (newRank > 7 || newFile > 7 || newRank < 0 || newFile < 0) {
       System.out.println("Piece cannot move outside the chessboard!");
@@ -309,10 +499,28 @@ public class Board {
         if (checkValid(rank, file, newRank, newFile, checking)) {
           if(!checking){
             storeMoveToHistory(new int[]{rank,file,newRank,newFile},getTurn());
+            if(board[7 - newRank][newFile] != null){
+              if(board[7-newRank][newFile].getColor() == -1){
+                takenPieces.add(new int[]{board[7 - newRank][newFile].getType(),board[7-newRank][newFile].getColor()});
+              }else{
+                takenPieces.add(0,new int[]{board[7 - newRank][newFile].getType(),board[7-newRank][newFile].getColor()});
+              }
+            }
           }
           board[7 - rank][file] = null;
           board[7 - newRank][newFile] = temp;
           board[7 - newRank][newFile].move(newRank, newFile);
+          if(castling){
+            if(newFile-2 == file){
+              board[7-rank][5] = board[7-rank][7];
+              board[7-rank][7] = null;
+              board[7-newRank][newFile].move(rank,5);
+            }else{
+              board[7-rank][2] = board[7-rank][0];
+              board[7-rank][0] = null;
+              board[7-newRank][newFile].move(rank,2);
+            }
+          }
           if (board[7 - newRank][newFile].getColor() == -1) {
             bMoves++;
           } else {
@@ -359,13 +567,63 @@ public class Board {
               }
             }
           }
-          
 
         } else {
           System.out.println("This move is Invalid!");
+          return false;
         }
       }
     }
+    return true;
+  }
+  public boolean checkValidCastling(int rank, int file, int newRank, int newFile, boolean checking){
+    //If the first space is null
+    if (board[7 - rank][file] == null) {
+      return false;
+    }
+    //If it's not that piece's color
+    if (getTurn() != board[7 - rank][file].getColor()) {
+      return false;
+    } 
+    //If the piece on the first space is not a King
+    if(board[7-rank][file].getType() != 6){
+      return false;
+    }
+    King temp = (King)board[7-rank][file];
+    //If the King has moved
+    if(temp.getHasMoved()){
+      return false;
+    }
+    //Short Castle
+    if(newFile == file+2 && !(newFile+1 < 0)){
+      if(board[7-rank][newFile+1] != null){
+        if(board[7-rank][newFile+1].getType() == 4){
+          if(!((Rook)board[7-rank][newFile+1]).getHasMoved()){
+            for(int i = 1; i<3; i++){
+              if(board[7-rank][file+i] != null){
+                return false;
+              }
+            }
+            return true;
+          }
+        }
+      }
+    //Long Castle
+    }else if(newFile == file-2 && !(newFile-2 >= 8)){
+      if(board[7-rank][newFile-2] != null){
+        if(board[7-rank][newFile-2].getType() == 4){
+          if(!((Rook)board[7-rank][newFile-2]).getHasMoved()){
+            for(int i = 1; i<4; i++){
+              if(board[7-rank][file-i] != null){
+                return false;
+              }
+            }
+            return true;
+          }
+        }
+      }
+    }
+    return false;
   }
 
   public boolean checkValid(int rank, int file, int newRank, int newFile, boolean checking) {
@@ -375,7 +633,9 @@ public class Board {
     if (getTurn() != board[7 - rank][file].getColor()) {
       return false;
     } 
-
+    if(checkValidCastling(rank, file, newRank, newFile, checking)){
+      return true;
+    }
     
     
     switch (board[7 - rank][file].getType()) {

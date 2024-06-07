@@ -1,9 +1,45 @@
 
 
 public class Bishop extends Piece {
-
+  private double[][] WvalueChart = new double[][]{
+    {-2.0,-1.0,-1.0,-1.0,-1.0,-1.0,-1.0,-2.0},
+    {-1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,-1.0},
+    {-1.0, 0.0, 0.5, 1.0, 1.0, 0.5, 0.0,-1.0},
+    {-1.0, 0.5, 0.5, 1.0, 1.0, 0.5, 0.5,-1.0},
+    {-1.0, 0.0, 1.0, 1.0, 1.0, 1.0, 0.0,-1.0},
+    {-1.0, 1.0, 1.0, 1.0, 1.5, 1.0, 1.0,-1.0},
+    {-1.0, 0.5, 0.0, 0.0, 0.0, 0.0, 0.5,-1.0},
+    {-2.0,-1.0,-1.0,-1.0,-1.0,-1.0,-1.0,-2.0},
+  };
+  private double[][] BvalueChart = new double[][]{
+    {-2.0,-1.0,-1.0,-1.0,-1.0,-1.0,-1.0,-2.0},
+    {-1.0, 0.5, 0.0, 0.0, 0.0, 0.0, 0.5,-1.0},
+    {-1.0, 1.0, 1.0, 1.0, 1.5, 1.0, 1.0,-1.0},
+    {-1.0, 0.0, 1.0, 1.0, 1.0, 1.0, 0.0,-1.0},
+    {-1.0, 0.0, 0.5, 1.0, 1.0, 0.5, 0.0,-1.0},
+    {-1.0, 0.0, 0.5, 1.0, 1.0, 0.5, 0.0,-1.0},
+    {-1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,-1.0},
+    {-2.0,-1.0,-1.0,-1.0,-1.0,-1.0,-1.0,-2.0},
+  };
     public Bishop(int color, int rank, int file) {
         super(2, color, rank, file);
+        if(color == 1){
+          this.setValue(30 + WvalueChart[7-rank][file]);
+        }else if(color == -1){
+          this.setValue(-30 -BvalueChart[7-rank][file]);
+        }else{
+          System.out.println("No color.");
+        }
+    }
+    public void move(int newRank, int newFile){
+      super.move(newRank, newFile);
+      if(getColor() == 1){
+        this.setValue(30 + WvalueChart[7-newRank][newFile]);
+      }else if(getColor() == -1){
+        this.setValue(-30 -BvalueChart[7-newRank][newFile]);
+      }else{
+        System.out.println("No color.");
+      }
     }
     public boolean valid(Piece[][] board, int newRank,int newFile){
         //Bishops move any direction in a diagonal.

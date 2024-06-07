@@ -23,7 +23,10 @@ abstract class Piece{
   private int color;
   private int rank;
   private int file;
-  private int value;
+  private double value;
+  public void setValue(double value){
+    this.value = value;
+  }
   public Piece(int type, int color, int rank, int file ){
     this.type = type;
     if(color == -1 || color == 1){
@@ -34,21 +37,14 @@ abstract class Piece{
     }
     this.rank = rank;
     this.file = file;
-    
-    //sets the value of the piece based on the type of piece
-    if(type == 1){
-      value = color;
-    }else if(type == 2 || type == 3){
-      value = 3 * color;
-    }else if(type == 4){
-      value = 5 * color;
-    }else if(type == 5){
-      value = 9 * color;
-    }else if(type == 6){
-      value = 99 * color;
-    }else{
-      System.out.println("Invalid Piece Type");
+  }
+  public boolean equals(Piece toCheck){
+    if(toCheck.getType() != type){
+      return false;
+    }else if(toCheck.getColor() != color){
+      return false;
     }
+    return true;
   }
   
   public void move(int newRank, int newFile){
@@ -82,7 +78,7 @@ abstract class Piece{
   public int getColor(){
     return color;
   }
-  public int getValue(){
+  public double getValue(){
     return value;
   }
   public int getRank(){

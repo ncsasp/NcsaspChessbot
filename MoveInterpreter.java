@@ -10,10 +10,47 @@ public class MoveInterpreter {
         Boolean takes;
         String toA;
         String toB;
+        String[] invalidChars = new String[] {"9","A","C","D","E","F","G","H","I","J","L","M","P","S","T","U","V","W","X","Y","Z","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","y","z",",",".","/","<",">","?","\"","'","{","}","[","]","|","\\","_","=","`","~","!","@","$","$","%","^","&","&","*","(",")"};
+        for(String character : invalidChars){
+            if(input.indexOf(character) != -1){
+                System.out.println("Invalid Character Found: '" + character + "'.");
+                return coordinates;
+            }
+        }
+        if(input.equals("0-0")){
+            System.out.println("You chose to Castle Short (Only works as white)");
+            //TODO: Finish Castling Input Selection
+            return new int[]{0,4,0,6};
+        }
+        String[] validChars = new String[]{"1","2","3","4","5","6","7","8"};
+        int charCount = 0;
+        for(String character : validChars){
+            if(input.indexOf(character) == -1){
+                charCount++;
+            }
+        }
+        if(charCount == 8){
+            System.out.println("You didn't include a number from 1-8. That's how i found that this ain't algebraic chess notation.");
+            return coordinates;
+        }
+        if(charCount < 6){
+            System.out.println("You put too many numbers from 1-8. That's how i found that this ain't algebraic chess notation.");
+            return coordinates;
+        }
+        
+        charCount = 0;
+        validChars = new String[] {"a","b","c","d","e","f","g","h"};
+        for(String character : validChars){
+            if(input.indexOf(character) != -1){
+                charCount ++;
+            }
+        }
+        if(charCount > 2){
+            System.out.println("Too many lowercase letters bucko.");
+            return coordinates;
+        }
         switch(input.length()){
             case 2:
-                
-                
                 piece = "P";
                 takes = false;
                 toA = input.substring(0,1);
@@ -196,8 +233,8 @@ public class MoveInterpreter {
                 case 1: 
                     if(takes){
                         int count = 0;
-                        if(coordinates[2] != 7){
-                            if(coordinates[3] != 0){
+                        if(coordinates[2] > 0){
+                            if(coordinates[3] > 0){
                                 if(tempBoard[7-(coordinates[2]-1)][coordinates[3]-1] != null){
                                     if(tempBoard[7-(coordinates[2]-1)][coordinates[3]-1].getColor() == turn && tempBoard[7-(coordinates[2]-1)][coordinates[3]-1].getType() == 1){
                                         Piece tempPiece = tempBoard[7-(coordinates[2]-1)][coordinates[3]-1];
@@ -221,7 +258,7 @@ public class MoveInterpreter {
                             }else{
                                 count++;
                             }
-                            if(coordinates[3] != 7){
+                            if(coordinates[3] < 7){
                                 if(tempBoard[7-(coordinates[2]-1)][coordinates[3]+1] != null){
                                     if(tempBoard[7-(coordinates[2]-1)][coordinates[3]+1].getColor() == turn && tempBoard[7-(coordinates[2]-1)][coordinates[3]+1].getType() == 1){
                                         Piece tempPiece = tempBoard[7-(coordinates[2]-1)][coordinates[3]+1];
@@ -246,8 +283,8 @@ public class MoveInterpreter {
                         }else{
                             count+=2;
                         }
-                        if(coordinates[2] != 0){
-                            if(coordinates[3] != 0){
+                        if(coordinates[2] < 7){
+                            if(coordinates[3] > 0){
                                 if(tempBoard[7-(coordinates[2]+1)][coordinates[3]-1] != null){
                                     if(tempBoard[7-(coordinates[2]+1)][coordinates[3]-1].getColor() == turn && tempBoard[7-(coordinates[2]+1)][coordinates[3]-1].getType() == 1){
                                         Piece tempPiece = tempBoard[7-(coordinates[2]+1)][coordinates[3]-1];
@@ -271,7 +308,7 @@ public class MoveInterpreter {
                             }else{
                                 count++;
                             }
-                            if(coordinates[3] != 7){
+                            if(coordinates[3] < 7){
                                 if(tempBoard[7-(coordinates[2]+1)][coordinates[3]+1] != null){
                                     if(tempBoard[7-(coordinates[2]+1)][coordinates[3]+1].getColor() == turn && tempBoard[7-(coordinates[2]+1)][coordinates[3]+1].getType() == 1){
                                         Piece tempPiece = tempBoard[7-(coordinates[2]+1)][coordinates[3]+1];

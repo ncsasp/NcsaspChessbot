@@ -1,3 +1,4 @@
-chcp 65001
-cls
-java -jar chess.jar
+@chcp 65001
+@cls
+@java -jar chess.jar
+@pause
